@@ -4,9 +4,9 @@ import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 import { read, utils, writeFile } from "xlsx";
 import {
   COLUMNS_ALFRED,
-  COLUMNS_EPIC,
+  COLUMNS_SNOVIO,
   COLUMNS_MEET_TIME,
-  COLUMNS_QUALIJET,
+  COLUMNS_BIGDATA,
   COLUMNS_REEV,
 } from "./premadeMappings";
 import { Dropdown } from "primereact/dropdown";
@@ -56,13 +56,13 @@ function App() {
   };
 
   const fileInRightFormat = (header) => {
-    if (fileFormat === "epic") {
-      if (!header.every((h) => COLUMNS_EPIC.includes(h))) {
-        showToast("Tabela no formato errado para EPIC");
+    if (fileFormat === "snovio") {
+      if (!header.every((h) => COLUMNS_SNOVIO.includes(h))) {
+        showToast("Tabela no formato errado para snovio");
         return false;
       }
-    } else if (fileFormat === "qualijet") {
-      if (!header.every((h) => COLUMNS_QUALIJET.includes(h))) {
+    } else if (fileFormat === "bigdata") {
+      if (!header.every((h) => COLUMNS_BIGDATA.includes(h))) {
         showToast("Tabela no formato errado para Qualijet");
         return false;
       }
@@ -72,50 +72,48 @@ function App() {
 
   const makeReevFormat = (rows, fileformat) => {
     const newRows = [COLUMNS_REEV];
-    if (fileformat === "epic") {
+    if (fileformat === "snovio") {
       rows.forEach((r) => {
         newRows.push([
-          r[COLUMNS_EPIC[2]], // Nome
-          r[COLUMNS_EPIC[3]], // Sobrenome
-          r[COLUMNS_EPIC[0]], // Email
-          r[COLUMNS_EPIC[11]], // Empresa
-          r[COLUMNS_EPIC[6]], // Cargo
-          r[COLUMNS_EPIC[20]], // Telefone
+          r[COLUMNS_SNOVIO[2]], // Nome
+          r[COLUMNS_SNOVIO[3]], // Sobrenome
+          r[COLUMNS_SNOVIO[0]], // Email
+          r[COLUMNS_SNOVIO[11]], // Empresa
+          r[COLUMNS_SNOVIO[6]], // Cargo
+          r[COLUMNS_SNOVIO[20]], // Telefone
           "", // Celular
-          r[COLUMNS_EPIC[16]], // Endereço
-          r[COLUMNS_EPIC[12]], // URL
-          r[COLUMNS_EPIC[5]], // Linkedin
+          r[COLUMNS_SNOVIO[16]], // Endereço
+          r[COLUMNS_SNOVIO[12]], // URL
+          r[COLUMNS_SNOVIO[5]], // Linkedin
           "", // Variavel 1
           "", // Variavel 2
           "", // Variavel 3
           "", // Grupo
         ]);
       });
-    } else if (fileformat === "qualijet") {
+    } else if (fileformat === "bigdata") {
       rows.forEach((r) => {
-        const nomes = r[COLUMNS_QUALIJET[41]].split(" ");
+        const nomes = r[COLUMNS_BIGDATA[41]].split(" ");
         const nome = nomes.shift();
         const sobrenome = nomes.reduce((prev, curr) => prev + `${curr} `, "");
-        const endereço = r[COLUMNS_QUALIJET[23]]
-          ? `${r[COLUMNS_QUALIJET[23]]}, ${r[COLUMNS_QUALIJET[24]]}`
+        const endereço = r[COLUMNS_BIGDATA[23]]
+          ? `${r[COLUMNS_BIGDATA[23]]}, ${r[COLUMNS_BIGDATA[24]]}`
           : "";
-        let telefone = r[COLUMNS_QUALIJET[26].split(",")[0]];
+        let telefone = r[COLUMNS_BIGDATA[26].split(",")[0]];
         telefone = /[^0-9]/g.test(telefone) ? "" : telefone;
         newRows.push([
           nome, // Nome
           sobrenome, // Sobrenome
-          r[COLUMNS_QUALIJET[37].split(",")[0]], // Email
-          r[COLUMNS_QUALIJET[1]]
-            ? r[COLUMNS_QUALIJET[1]]
-            : r[COLUMNS_QUALIJET[0]], // Empresa
-          r[COLUMNS_QUALIJET[42]], // Cargo
+          r[COLUMNS_BIGDATA[37].split(",")[0]], // Email
+          r[COLUMNS_BIGDATA[1]] ? r[COLUMNS_BIGDATA[1]] : r[COLUMNS_BIGDATA[0]], // Empresa
+          r[COLUMNS_BIGDATA[42]], // Cargo
           telefone, // Telefone
-          r[COLUMNS_QUALIJET[31].split(",")[0]], // Celular
+          r[COLUMNS_BIGDATA[31].split(",")[0]], // Celular
           endereço, // Endereço
-          r[COLUMNS_QUALIJET[32]], // URL
-          r[COLUMNS_QUALIJET[43]], // Linkedin
-          r[COLUMNS_QUALIJET[2]], // Variavel 1 -- CNPJ
-          r[COLUMNS_QUALIJET[6]], // Variavel 2 -- CNAE
+          r[COLUMNS_BIGDATA[32]], // URL
+          r[COLUMNS_BIGDATA[43]], // Linkedin
+          r[COLUMNS_BIGDATA[2]], // Variavel 1 -- CNPJ
+          r[COLUMNS_BIGDATA[6]], // Variavel 2 -- CNAE
           "", // Variavel 3
           "", // Grupo
         ]);
@@ -127,38 +125,36 @@ function App() {
 
   const makeMeetTimeFormat = (rows, fileformat) => {
     const newRows = [COLUMNS_MEET_TIME];
-    if (fileformat === "epic") {
+    if (fileformat === "snovio") {
       rows.forEach((r) => {
         newRows.push([
-          r[COLUMNS_EPIC[11]], // Empresa
-          r[COLUMNS_EPIC[2]], // Nome
-          r[COLUMNS_EPIC[4]], // Nome Completo
-          r[COLUMNS_EPIC[20]], // Telefone
-          r[COLUMNS_EPIC[0]], // Email
-          r[COLUMNS_EPIC[6]], // Cargo
-          r[COLUMNS_EPIC[13]], // Linkedin
+          r[COLUMNS_SNOVIO[11]], // Empresa
+          r[COLUMNS_SNOVIO[2]], // Nome
+          r[COLUMNS_SNOVIO[4]], // Nome Completo
+          r[COLUMNS_SNOVIO[20]], // Telefone
+          r[COLUMNS_SNOVIO[0]], // Email
+          r[COLUMNS_SNOVIO[6]], // Cargo
+          r[COLUMNS_SNOVIO[13]], // Linkedin
         ]);
       });
-    } else if (fileformat === "qualijet") {
+    } else if (fileformat === "bigdata") {
       rows.forEach((r) => {
-        const nomes = r[COLUMNS_QUALIJET[41]].split(" ");
+        const nomes = r[COLUMNS_BIGDATA[41]].split(" ");
         const nome = nomes.shift();
         const sobrenome = nomes.reduce((prev, curr) => prev + `${curr} `, "");
-        const endereço = r[COLUMNS_QUALIJET[23]]
-          ? `${r[COLUMNS_QUALIJET[23]]}, ${r[COLUMNS_QUALIJET[24]]}`
+        const endereço = r[COLUMNS_BIGDATA[23]]
+          ? `${r[COLUMNS_BIGDATA[23]]}, ${r[COLUMNS_BIGDATA[24]]}`
           : "";
-        let telefone = r[COLUMNS_QUALIJET[26].split(",")[0]];
+        let telefone = r[COLUMNS_BIGDATA[26].split(",")[0]];
         telefone = /[^0-9]/g.test(telefone) ? "" : telefone;
         newRows.push([
-          r[COLUMNS_QUALIJET[1]]
-            ? r[COLUMNS_QUALIJET[1]]
-            : r[COLUMNS_QUALIJET[0]], // Empresa
+          r[COLUMNS_BIGDATA[1]] ? r[COLUMNS_BIGDATA[1]] : r[COLUMNS_BIGDATA[0]], // Empresa
           nome, // Nome
-          r[COLUMNS_QUALIJET[41]], // Nome Completo
+          r[COLUMNS_BIGDATA[41]], // Nome Completo
           telefone, // Telefone
-          r[COLUMNS_QUALIJET[37].split(",")[0]], // Email
-          r[COLUMNS_QUALIJET[42]], // Cargo
-          r[COLUMNS_QUALIJET[43]], // Linkedin
+          r[COLUMNS_BIGDATA[37].split(",")[0]], // Email
+          r[COLUMNS_BIGDATA[42]], // Cargo
+          r[COLUMNS_BIGDATA[43]], // Linkedin
         ]);
       });
     }
@@ -170,27 +166,25 @@ function App() {
     if (fileformat === "epic") {
       rows.forEach((r) => {
         newRows.push([
-          r[COLUMNS_EPIC[13]], // Linkedin
-          r[COLUMNS_EPIC[2]], // Nome
-          r[COLUMNS_EPIC[11]], // Empresa
+          r[COLUMNS_SNOVIO[13]], // Linkedin
+          r[COLUMNS_SNOVIO[2]], // Nome
+          r[COLUMNS_SNOVIO[11]], // Empresa
         ]);
       });
-    } else if (fileformat === "qualijet") {
+    } else if (fileformat === "bigdata") {
       rows.forEach((r) => {
-        const nomes = r[COLUMNS_QUALIJET[41]].split(" ");
+        const nomes = r[COLUMNS_BIGDATA[41]].split(" ");
         const nome = nomes.shift();
         const sobrenome = nomes.reduce((prev, curr) => prev + `${curr} `, "");
-        const endereço = r[COLUMNS_QUALIJET[23]]
-          ? `${r[COLUMNS_QUALIJET[23]]}, ${r[COLUMNS_QUALIJET[24]]}`
+        const endereço = r[COLUMNS_BIGDATA[23]]
+          ? `${r[COLUMNS_BIGDATA[23]]}, ${r[COLUMNS_BIGDATA[24]]}`
           : "";
-        let telefone = r[COLUMNS_QUALIJET[26].split(",")[0]];
+        let telefone = r[COLUMNS_BIGDATA[26].split(",")[0]];
         telefone = /[^0-9]/g.test(telefone) ? "" : telefone;
         newRows.push([
-          r[COLUMNS_QUALIJET[43]], // Linkedin
+          r[COLUMNS_BIGDATA[43]], // Linkedin
           nome, // Nome
-          r[COLUMNS_QUALIJET[1]]
-            ? r[COLUMNS_QUALIJET[1]]
-            : r[COLUMNS_QUALIJET[0]], // Empresa
+          r[COLUMNS_BIGDATA[1]] ? r[COLUMNS_BIGDATA[1]] : r[COLUMNS_BIGDATA[0]], // Empresa
         ]);
       });
     }
@@ -214,14 +208,14 @@ function App() {
           <h1 className="text-3xl font-semibold">Mapeador de Planilha</h1>
           <div className="flex h-full w-full flex-col items-center justify-between p-4 pt-16">
             <div className="flex h-fit w-full flex-col items-center gap-3">
-              <span className="p-float-label w-1/4">
+              <span className="p-float-label w-full">
                 <Dropdown
                   inputId="dd-formatfile"
                   value={fileFormat}
                   onChange={(e) => setFileFormat(e.value)}
                   options={[
-                    { name: "Epic", value: "epic" },
-                    { name: "Qualijet", value: "qualijet" },
+                    { name: "Snovio", value: "snovio" },
+                    { name: "Big Data", value: "bigdata" },
                   ]}
                   optionLabel="name"
                   className="md:w-14rem w-full"
@@ -258,9 +252,8 @@ function App() {
       </div>
       <div
         className={
-          `absolute left-0 top-0 h-screen w-screen items-center justify-center bg-slate-400 bg-opacity-30 backdrop-blur-sm ` +
           loading
-            ? "flex"
+            ? "backdrop-blur-smflex absolute left-0 top-0 h-screen w-screen items-center justify-center bg-slate-400 bg-opacity-30"
             : "hidden"
         }
       >

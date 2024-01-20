@@ -1,4 +1,4 @@
-export const COLUMNS_QUALIJET = [
+export const COLUMNS_BIGDATA = [
   "Razão Social", // 0
   "Nome Fantasia", // 1
   "CNPJ", // 2
@@ -76,7 +76,7 @@ export const COLUMNS_QUALIJET = [
   "Reclamações por produto (Reclame Aqui)", // 74
 ];
 
-export const COLUMNS_EPIC = [
+export const COLUMNS_SNOVIO = [
   "E-mail", // 0
   "Status do e-mail", // 1
   "Nome", // 2
